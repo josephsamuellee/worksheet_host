@@ -1,0 +1,11 @@
+CAR CHECK
+
+Date: __________
+
+[ ] Tires checked
+[ ] Oil checked
+[ ] Lights checked
+
+Mileage: __________
+
+Comments: ______________________________
