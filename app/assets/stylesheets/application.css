@@ -1,0 +1,343 @@
+/*
+ * Worksheet Host — mobile-first styles for iPhone Safari.
+ * Dark mode is the default. Light mode via html[data-theme="light"].
+ * No external fonts or CDN assets.
+ */
+
+:root {
+  --bg: #12161a;
+  --bg-accent: #1a2128;
+  --bg-top: #171c22;
+  --ink: #e8eef2;
+  --ink-muted: #9aa7b2;
+  --line: #2c3640;
+  --accent: #3d9b7f;
+  --accent-ink: #04140f;
+  --danger: #f0a0a0;
+  --ok: #6dcaa8;
+  --focus: #4aa3c7;
+  --surface: #1e262e;
+  --surface-ink: var(--ink);
+  --pill-bg: #24352f;
+  --flash-ok-bg: #1e332c;
+  --flash-err-bg: #3a2222;
+  --radius: 8px;
+  --page-pad: 1rem;
+  --font: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+  --font-ui: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+  /* ~half prior worksheet size so one TXT line stays one visual row on iPhone */
+  --worksheet-font-size: 0.525rem;
+}
+
+html[data-theme="light"] {
+  --bg: #eef2f4;
+  --bg-accent: #e2e8ec;
+  --bg-top: #f7fafb;
+  --ink: #182028;
+  --ink-muted: #5a6670;
+  --line: #c5d0d8;
+  --accent: #1f5c4d;
+  --accent-ink: #f4faf7;
+  --danger: #9b2c2c;
+  --ok: #1f5c4d;
+  --focus: #1d6a8a;
+  --surface: #fff;
+  --surface-ink: var(--ink);
+  --pill-bg: #d5e8e1;
+  --flash-ok-bg: #d5e8e1;
+  --flash-err-bg: #f3d6d6;
+}
+
+@media (orientation: landscape) {
+  :root {
+    --worksheet-font-size: 0.4725rem; /* 10% smaller than portrait */
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 17px;
+  line-height: 1.45;
+  background:
+    linear-gradient(165deg, var(--bg-top) 0%, var(--bg) 42%, var(--bg-accent) 100%);
+}
+
+a {
+  color: var(--accent);
+}
+
+.page {
+  width: min(100%, 42rem);
+  margin: 0 auto;
+  padding: 1.25rem var(--page-pad) 3rem;
+}
+
+.page-header h1 {
+  margin: 0.15rem 0 0.35rem;
+  font-family: var(--font);
+  font-size: clamp(1.65rem, 5.5vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.lede,
+.breadcrumb {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.95rem;
+}
+
+.sticky-tools {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding: 0.75rem 0 0.85rem;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 1rem;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+
+.save-indicator {
+  min-height: 1.25rem;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+}
+
+.save-indicator[data-state="save-failed"] {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.save-indicator[data-state="saved"] {
+  color: var(--ok);
+}
+
+.btn,
+button.btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.55rem 0.95rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--surface-ink);
+  border-color: var(--line);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.85rem;
+  border-radius: 6px;
+  background: var(--pill-bg);
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.worksheet-list {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.worksheet-item {
+  padding: 1rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.worksheet-item-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.worksheet-item-header h2 {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 1.3rem;
+}
+
+.response-group {
+  margin-top: 0.85rem;
+}
+
+.response-group h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+.response-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.response-links a {
+  display: block;
+  padding: 0.55rem 0;
+  min-height: 44px;
+}
+
+.empty-state {
+  margin-top: 2rem;
+  color: var(--ink-muted);
+}
+
+.flash {
+  margin: 0.75rem 0 0;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--radius);
+}
+
+.flash-notice {
+  background: var(--flash-ok-bg);
+}
+
+.flash-alert {
+  background: var(--flash-err-bg);
+  color: var(--danger);
+}
+
+.worksheet-form {
+  font-family: var(--font);
+  font-size: var(--worksheet-font-size);
+  line-height: 1.35;
+}
+
+.worksheet-line {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.25em 0.35em;
+  min-height: 1.35em;
+  margin: 0.05em 0;
+  white-space: nowrap;
+}
+
+.worksheet-text {
+  white-space: pre;
+  flex: 0 0 auto;
+}
+
+.worksheet-blank {
+  display: block;
+  min-height: 1em;
+}
+
+.worksheet-input {
+  flex: 1 1 6em;
+  min-width: 4em;
+  max-width: 100%;
+  min-height: 1.6em;
+  padding: 0.1em 0.3em;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--surface-ink);
+  font-size: inherit;
+  font-family: var(--font-ui);
+  line-height: 1.3;
+}
+
+.worksheet-input:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+  border-color: var(--focus);
+}
+
+.worksheet-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 1.6em;
+  min-height: 1.6em;
+  margin: 0;
+  border-radius: 3px;
+}
+
+.worksheet-checkbox input {
+  width: 1em;
+  height: 1em;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.field-highlight {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 55%, transparent);
+  border-radius: 8px;
+  transition: box-shadow 0.2s ease;
+}
+
+.theme-footer {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: center;
+}
+
+.theme-toggle {
+  min-width: 10rem;
+}
+
+@media (max-width: 420px) {
+  .worksheet-item-header {
+    align-items: stretch;
+  }
+
+  .worksheet-item-header .btn {
+    width: 100%;
+  }
+}

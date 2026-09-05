@@ -1,0 +1,30 @@
+<% case token.type %>
+<% when :text %>
+  <span class="worksheet-text"><%= token.value %></span>
+<% when :input %>
+  <% value = worksheet_response.answer_for(token.field_key).to_s %>
+  <input type="text"
+         id="<%= token.field_key %>"
+         name="answers[<%= token.field_key %>]"
+         value="<%= value %>"
+         class="worksheet-input"
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"
+         data-field-key="<%= token.field_key %>"
+         data-field-type="input"
+         data-action="input->autosave#onTextInput change->autosave#onTextChange keydown->field-navigation#onKeydown">
+<% when :checkbox %>
+  <% checked = ActiveModel::Type::Boolean.new.cast(worksheet_response.answer_for(token.field_key)) %>
+  <label class="worksheet-checkbox" for="<%= token.field_key %>">
+    <input type="checkbox"
+           id="<%= token.field_key %>"
+           name="answers[<%= token.field_key %>]"
+           value="true"
+           <%= "checked" if checked %>
+           data-field-key="<%= token.field_key %>"
+           data-field-type="checkbox"
+           data-action="change->autosave#onCheckboxChange">
+  </label>
+<% end %>

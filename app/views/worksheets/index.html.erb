@@ -1,0 +1,74 @@
+<% content_for :title, "Worksheets" %>
+
+<main class="page">
+  <header class="page-header">
+    <h1>Worksheets</h1>
+    <p class="lede">Choose a worksheet to fill out.</p>
+  </header>
+
+  <% if flash[:alert].present? %>
+    <p class="flash flash-alert"><%= flash[:alert] %></p>
+  <% end %>
+  <% if flash[:notice].present? %>
+    <p class="flash flash-notice"><%= flash[:notice] %></p>
+  <% end %>
+
+  <% if @worksheets.empty? %>
+    <p class="empty-state">
+      No worksheets yet. Drop a <code>.txt</code> file into the intake folder and refresh.
+    </p>
+  <% else %>
+    <ul class="worksheet-list">
+      <% @worksheets.each do |worksheet| %>
+        <li class="worksheet-item">
+          <div class="worksheet-item-header">
+            <h2><%= worksheet.name %></h2>
+            <%= button_to "Start New",
+                  worksheet_responses_path(worksheet),
+                  method: :post,
+                  class: "btn btn-primary",
+                  disabled: worksheet.latest_template_version.nil? %>
+          </div>
+
+          <% drafts = worksheet.draft_responses.limit(10) %>
+          <% completed = worksheet.completed_responses.limit(10) %>
+
+          <% if drafts.any? %>
+            <div class="response-group">
+              <h3>Drafts</h3>
+              <ul class="response-links">
+                <% drafts.each do |draft| %>
+                  <li>
+                    <%= link_to l(draft.updated_at, format: :short), worksheet_response_path(draft) %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <% if completed.any? %>
+            <div class="response-group">
+              <h3>Completed</h3>
+              <ul class="response-links">
+                <% completed.each do |done| %>
+                  <li>
+                    <%= link_to l(done.updated_at, format: :short), worksheet_response_path(done) %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <footer class="theme-footer" data-controller="theme">
+    <button type="button"
+            class="btn btn-secondary theme-toggle"
+            data-theme-target="button"
+            data-action="theme#toggle">
+      Light mode
+    </button>
+  </footer>
+</main>

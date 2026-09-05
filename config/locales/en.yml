@@ -1,0 +1,4 @@
+en:
+  time:
+    formats:
+      short: "%b %-d, %-l:%M %p"

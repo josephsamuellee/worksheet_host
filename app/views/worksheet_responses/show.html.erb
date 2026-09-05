@@ -1,0 +1,56 @@
+<% content_for :title, @worksheet.name %>
+
+<main class="page response-page"
+      data-controller="autosave field-navigation jump-to-last-edit"
+      data-autosave-url-value="<%= worksheet_response_path(@worksheet_response) %>"
+      data-autosave-debounce-value="750"
+      data-jump-to-last-edit-field-key-value="<%= @worksheet_response.last_edited_field_key %>">
+
+  <header class="page-header sticky-tools">
+    <p class="breadcrumb"><%= link_to "Worksheets", root_path %></p>
+    <h1><%= @worksheet.name %></h1>
+
+    <div class="toolbar">
+      <span class="save-indicator" data-autosave-target="status" aria-live="polite"></span>
+
+      <button type="button"
+              class="btn btn-secondary"
+              data-action="jump-to-last-edit#jump"
+              data-jump-to-last-edit-target="button"
+              <% if @worksheet_response.last_edited_field_key.blank? %>hidden<% end %>>
+        Jump to last edit
+      </button>
+
+      <% if @worksheet_response.draft? %>
+        <%= button_to "Mark Complete",
+              complete_worksheet_response_path(@worksheet_response),
+              method: :patch,
+              class: "btn btn-primary" %>
+      <% else %>
+        <span class="status-pill">Completed</span>
+      <% end %>
+
+      <%= link_to "Export TXT",
+            worksheet_response_export_path(@worksheet_response),
+            class: "btn btn-secondary" %>
+    </div>
+
+    <% if flash[:notice].present? %>
+      <p class="flash flash-notice"><%= flash[:notice] %></p>
+    <% end %>
+  </header>
+
+  <form class="worksheet-form" data-autosave-target="form" onsubmit="return false;">
+    <% @lines.each do |line| %>
+      <div class="worksheet-line">
+        <% if line.tokens.empty? %>
+          <span class="worksheet-blank">&nbsp;</span>
+        <% else %>
+          <% line.tokens.each do |token| %>
+            <%= render "worksheet_responses/token", token: token, worksheet_response: @worksheet_response %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </form>
+</main>
